@@ -1,29 +1,57 @@
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Column from "../components/columns";
 import Cards from "../components/cards";
-import Data from "../components/constants/data";
-import update from "immutability-helper";
 import { ColumnTypes } from "components/constants/enums";
 import { Space } from "@pankod/refine-antd";
+import { IProduct } from "components/constants/models";
+import { useList } from "@pankod/refine-core";
 
-type Props = {};
+function DashboardPage() {
+  //Fetching data from the products endpoint
+  //using refine's useList hook
 
-function DashboardPage({}: Props) {
-  const [orders, setOrders] = useState(Data);
+  const { data } = useList<IProduct>({
+    config: {
+      pagination: {
+        current: 2,
+      },
+    },
+    resource: "products",
+  });
+
+  //modifying fecthed data and adding column property
+
+  const newArr = data?.data.map((i: IProduct) => {
+    return {
+      ...i,
+      column: ColumnTypes.ORDERS,
+    };
+  });
+
+  const [orders, setOrders] = useState<any[] | undefined>([]);
+
+  //creating side effects based on the data's response.
+
+  useEffect(() => {
+    setOrders(newArr);
+  }, [data?.data]);
 
   const columnItem = (columnName: string) => {
-    return orders
-      .filter((order) => order.column === columnName)
-      .map((order, index) => (
-        <Cards
-          key={order.id}
-          title={order.title}
-          desc={order.desc}
-          setOrders={setOrders}
-          index={index}
-        />
-      ));
+    return (
+      orders &&
+      orders
+        .filter((order) => order.column === columnName)
+        .map((order, index) => (
+          <Cards
+            key={order.id}
+            title={order.name}
+            desc={order.material}
+            setOrders={setOrders}
+            index={index}
+          />
+        ))
+    );
   };
 
   const { ORDERS, IN_PROGRESS, DELIVERED, RETURNED } = ColumnTypes;
@@ -36,9 +64,9 @@ function DashboardPage({}: Props) {
         size={109}
         style={{
           display: "flex",
-
-          justifyContent: "center",
+          marginLeft: "20px",
           marginTop: "20px",
+          gap: "7rem",
         }}
       >
         <Column title={ORDERS}>{columnItem(ORDERS)}</Column>

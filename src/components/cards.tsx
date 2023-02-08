@@ -1,18 +1,16 @@
 import React from "react";
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag } from "react-dnd";
 import { cardType, ColumnTypes } from "./constants/enums";
 import { Card } from "@pankod/refine-antd";
 
-type item = {
-  id: number;
-  index: number;
+type obj = {
+  title: {};
 };
 
 function Cards({
   title,
   desc,
   setOrders,
-  index,
 }: {
   title: string;
   desc: string;
@@ -24,14 +22,10 @@ function Cards({
       return prevState.map((item: any) => {
         return {
           ...item,
-          column: item.title === CurrentOrder.title ? columnName : item.column,
+          column: item.name === CurrentOrder.title ? columnName : item.column,
         };
       });
     });
-  };
-
-  type obj = {
-    title: {};
   };
 
   const [{ isDragging }, drag] = useDrag({
