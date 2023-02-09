@@ -4,16 +4,16 @@ import { cardType, ColumnTypes } from "./constants/enums";
 import { Card } from "@pankod/refine-antd";
 
 type obj = {
-  title: {};
+  name: {};
 };
 
 function Cards({
-  title,
-  desc,
+  name,
+  material,
   setOrders,
 }: {
-  title: string;
-  desc: string;
+  name: string;
+  material: string;
   setOrders: any;
   index: number;
 }) {
@@ -22,7 +22,7 @@ function Cards({
       return prevState.map((item: any) => {
         return {
           ...item,
-          column: item.name === CurrentOrder.title ? columnName : item.column,
+          column: item.name === CurrentOrder.name ? columnName : item.column,
         };
       });
     });
@@ -30,14 +30,14 @@ function Cards({
 
   const [{ isDragging }, drag] = useDrag({
     type: cardType.ORDER,
-    item: { title },
+    item: { name },
     end: (order, monitor) => {
       const dropResult = monitor.getDropResult<obj>();
 
       if (dropResult) {
-        const { title } = dropResult;
+        const { name } = dropResult;
         const { ORDERS, IN_PROGRESS, DELIVERED, RETURNED } = ColumnTypes;
-        switch (title) {
+        switch (name) {
           case ORDERS:
             orderColumnChange(order, ColumnTypes.ORDERS);
             break;
@@ -63,7 +63,7 @@ function Cards({
 
   return (
     <Card
-      title={title}
+      title={name}
       className="card"
       ref={drag}
       style={{
@@ -72,7 +72,7 @@ function Cards({
         boxShadow: "1px 4px 11px -2px rgba(135,135,135,0.75)",
       }}
     >
-      {desc}
+      {material}
     </Card>
   );
 }

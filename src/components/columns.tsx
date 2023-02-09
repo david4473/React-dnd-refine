@@ -3,11 +3,11 @@ import { Row, Col } from "@pankod/refine-antd";
 import { useDrop } from "react-dnd";
 import { cardType } from "./constants/enums";
 
-function Column({ children, title }: { children: any; title: string }) {
+function Column({ children, name }: { children: any; name: string }) {
   const [{ isOver }, dropref] = useDrop({
     accept: cardType.ORDER,
     drop: () => ({
-      title,
+      name,
     }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -35,7 +35,7 @@ function Column({ children, title }: { children: any; title: string }) {
             color: "#84878c",
           }}
         >
-          {title}
+          {name}
         </div>
         <div
           ref={dropref}
