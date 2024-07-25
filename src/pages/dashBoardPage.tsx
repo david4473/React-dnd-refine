@@ -13,7 +13,7 @@ function DashboardPage() {
   //creating side effects based on the data's response.
   useEffect(() => {
     setOrders(newArr);
-  }, [products]);
+  }, [products]); // eslint-disable-line
 
   const columnItem = (columnName: string) => {
     return (
